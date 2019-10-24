@@ -1,2 +1,2 @@
 # plataform-game
-Platorfom game in JavaScript using Phaser
+Plataform game in JavaScript using Phaser
