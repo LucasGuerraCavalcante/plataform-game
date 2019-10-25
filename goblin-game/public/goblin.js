@@ -21,7 +21,7 @@ function preload() {
     game.load.image('cave', 'asts/cave.png')
     game.load.image('ground','/asts/plat.png')
     game.load.image('coin','asts/coin.png')
-    game.load.spritesheet('goblin','asts/gob.png',20,30)
+    game.load.spritesheet('goblin','asts/gobwalk.png',30,32)
 }
 
 function create() {
@@ -36,13 +36,18 @@ function create() {
     footboard = game.add.group() 
     footboard.enableBody = true
 
-    let ground = footboard.create(0, game.world.height - 64, 'ground')
+    let ground = footboard.create(0, game.world.height - 37, 'ground')
     ground.scale.setTo(2, 2)
     ground.body.immovable = true 
+
+    let roof = footboard.create(0, 15, 'ground')
+    roof.scale.setTo(2, -2)
+    roof.body.immovable = true 
 
     // THE GOBLIN (PLAYER)
 
     goblin = game.add.sprite(12, game.world.height - 100, 'goblin')
+    goblin.scale.setTo(1.5,1.5)
 
     game.physics.arcade.enable(goblin)
 
@@ -50,8 +55,8 @@ function create() {
     goblin.body.gravity.y = 800
     goblin.body.collideWorldBounds = true
 
-    goblin.animations.add('walkingLeft', [0, 1], 10, true)
-    goblin.animations.add('walkingRight', [2, 3], 10, true)
+    goblin.animations.add('walkingLeft', [1, 2, 0], 10, true)
+    goblin.animations.add('walkingRight', [4, 5, 3], 10, true)
 
     // OBJECTS 
 
