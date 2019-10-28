@@ -1,3 +1,5 @@
+
+
 //  Initialize the Phaser Game object 
 const game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
     preload: preload,
@@ -5,7 +7,7 @@ const game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
     update: update
 })
 
-// Global variables
+// Shared variables
 
 var footboard
 var coins
@@ -22,6 +24,7 @@ function preload() {
     game.load.image('ground','/asts/plat.png')
     game.load.image('coin','asts/coin.png')
     game.load.spritesheet('goblin','asts/gobwalk.png',30,32)
+    game.load.spritesheet('rocks','asts/rocks.png',32,32)
 }
 
 function create() {
@@ -31,10 +34,12 @@ function create() {
 
     game.add.sprite(0, 0, 'cave')
 
-    // GROUND AND PLATAFORMS 
+    // GROUND, ROOF AND PLATAFORMS 
 
     footboard = game.add.group() 
     footboard.enableBody = true
+
+    // Ground and Roof
 
     let ground = footboard.create(0, game.world.height - 37, 'ground')
     ground.scale.setTo(2, 2)
@@ -43,6 +48,29 @@ function create() {
     let roof = footboard.create(0, 15, 'ground')
     roof.scale.setTo(2, -2)
     roof.body.immovable = true 
+
+    // Plataforms 
+
+    let plataform = footboard.create(400, 500, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 0
+
+    plataform = footboard.create(432, 500, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 1
+
+    plataform = footboard.create(464, 500, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 1
+
+    plataform = footboard.create(496, 500, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 1
+    
+    plataform = footboard.create(528, 500, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 2
+
 
     // THE GOBLIN (PLAYER)
 
@@ -55,8 +83,8 @@ function create() {
     goblin.body.gravity.y = 800
     goblin.body.collideWorldBounds = true
 
-    goblin.animations.add('walkingLeft', [1, 2, 0], 10, true)
-    goblin.animations.add('walkingRight', [4, 5, 3], 10, true)
+    goblin.animations.add('walkingLeft', [1, 2, 0, 1], 10, true)
+    goblin.animations.add('walkingRight', [4, 5, 3, 4], 10, true)
 
     // OBJECTS 
 
@@ -74,7 +102,7 @@ function create() {
     keyboardButton = game.input.keyboard.createCursorKeys()
 
     // SCORE 
-    scoreCounter  = game.add.text(10,570, 'Score: ', {fontSize: '43px', fill: '#ffff'})
+    scoreCounter  = game.add.text(10,18, 'Score: ', {fontSize: '43px', fill: '#ffff'})
 
 }
 
@@ -90,16 +118,17 @@ function update() {
     if (keyboardButton.left.isDown) {
 
         goblin.body.velocity.x = -150
-        goblin.animations.play('walkingLeft')
+        goblin.animations.play('walkingLeft', true)
 
     } else if (keyboardButton.right.isDown) {
 
         goblin.body.velocity.x = 150
-        goblin.animations.play('walkingRight')
+        goblin.animations.play('walkingRight', true)
 
     } else {
 
         goblin.animations.stop()
+        
 
     }
 
@@ -112,6 +141,10 @@ function update() {
 
     game.physics.arcade.overlap(goblin, coin, getCoins, null, this)
 
+    // Colecting coins 
+
+    game.physics.arcade.overlap(goblin, coins, getCoins)
+
 
 }
 
@@ -122,4 +155,6 @@ function getCoins (goblin, coin) {
 
     score += 10
     scoreCounter.text = 'Score: ' + score
+
+    console.log(score)
 }
