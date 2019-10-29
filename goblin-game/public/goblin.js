@@ -25,6 +25,7 @@ function preload() {
     game.load.image('coin','asts/coin.png')
     game.load.spritesheet('goblin','asts/gobwalk.png',30,32)
     game.load.spritesheet('rocks','asts/rocks.png',32,32)
+    game.load.spritesheet('sand','asts/sand.png',32,32)
 }
 
 function create() {
@@ -51,6 +52,8 @@ function create() {
 
     // Plataforms 
 
+    // plataform 1
+
     let plataform = footboard.create(400, 500, 'rocks')
     plataform.body.immovable = true 
     plataform.frame = 0
@@ -71,6 +74,31 @@ function create() {
     plataform.body.immovable = true 
     plataform.frame = 2
 
+    // plataform 2 
+
+    plataform = footboard.create(564, 450, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 0
+
+    plataform = footboard.create(596, 450, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 1
+    
+    plataform = footboard.create(628, 450, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 2
+
+    // plataform 3 
+
+    plataform = footboard.create(660, 500, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 3
+
+    // plataform 4
+
+    plataform = footboard.create(670, 370, 'sand')
+    plataform.body.immovable = false 
+    plataform.frame = 3
 
     // THE GOBLIN (PLAYER)
 
@@ -94,8 +122,19 @@ function create() {
     coins.enableBody = true
 
     coin = coins.create(400,400,'coin')
+    coin.body.gravity.y = 300
+    coin.body.bounce.y = 0.7
 
-    coin.body.gravity.y = 1000
+    coin = coins.create(600,400,'coin')
+    coin.body.gravity.y = 300
+    coin.body.bounce.y = 0.7
+
+    coin = coins.create(700,400,'coin')
+    coin.body.gravity.y = 300
+    coin.body.bounce.y = 0.7
+
+    coin = coins.create(700,400,'coin')
+    coin.body.gravity.y = 300
     coin.body.bounce.y = 0.7
 
     // CONTROLS 
@@ -128,7 +167,7 @@ function update() {
     } else {
 
         goblin.animations.stop()
-        
+
 
     }
 
@@ -136,7 +175,7 @@ function update() {
 
     // Only can jump if its touching the ground
     if (keyboardButton.up.isDown && goblin.body.touching.down) {
-        goblin.body.velocity.y = -400
+        goblin.body.velocity.y = -360
     }
 
     game.physics.arcade.overlap(goblin, coin, getCoins, null, this)
