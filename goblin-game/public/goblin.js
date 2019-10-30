@@ -43,10 +43,13 @@ function create() {
 
     game.add.sprite(0, 0, 'cave')
 
-    // GROUND, ROOF AND PLATAFORMS 
+    // GROUND, ROOF, PLATAFORMS AND BOXES 
 
     footboard = game.add.group() 
     footboard.enableBody = true
+
+    sandBoxes = game.add.group() 
+    sandBoxes.enableBody = true
 
     // Ground and Roof
 
@@ -103,9 +106,6 @@ function create() {
     plataform.frame = 3
 
     // plataform 4 (sand box)
-
-    sandBoxes = game.add.group() 
-    sandBoxes.enableBody = true
 
     let sand  = sandBoxes.create(670, 370, 'sand')
     sand.body.immovable = true 
@@ -168,6 +168,14 @@ function update() {
     game.physics.arcade.collide(goblin, footboard)
     game.physics.arcade.collide(coins, footboard)
 
+    // Colecting coins 
+
+    game.physics.arcade.overlap(goblin, coins, getCoins)
+
+    // Jumping over the sand boxes 
+
+    game.physics.arcade.collide(goblin, sandBoxes, makeTheSandFall)
+
     // Making the Goblin Walk
 
     if (keyboardButton.left.isDown) {
@@ -184,7 +192,6 @@ function update() {
 
         goblin.animations.stop()
 
-
     }
 
     // Making the Goblin Jump
@@ -193,14 +200,6 @@ function update() {
     if (keyboardButton.up.isDown && goblin.body.touching.down) {
         goblin.body.velocity.y = -360
     }
-
-    // Colecting coins 
-
-    game.physics.arcade.overlap(goblin, coins, getCoins)
-
-    // Jumping over the sand boxes 
-
-    game.physics.arcade.collide(goblin, sandBoxes, makeTheSandFall)
 
 }
 
