@@ -10,6 +10,7 @@ const game = new Phaser.Game(800, 600, Phaser.AUTO, '', {
 // Shared variables
 
 var footboard
+var sandBoxes
 var coins
 var goblin
 
@@ -20,12 +21,19 @@ var keyboardButton
 // Phaser Functions
 
 function preload() {
+
+    // World
     game.load.image('cave', 'asts/cave.png')
     game.load.image('ground','/asts/plat.png')
-    game.load.image('coin','asts/coin.png')
-    game.load.spritesheet('goblin','asts/gobwalk.png',30,32)
     game.load.spritesheet('rocks','asts/rocks.png',32,32)
     game.load.spritesheet('sand','asts/sand.png',32,32)
+
+    // Objects
+    game.load.image('coin','asts/coin.png')
+
+    // Players
+    game.load.spritesheet('goblin','asts/gobwalk.png',30,32)
+
 }
 
 function create() {
@@ -94,11 +102,14 @@ function create() {
     plataform.body.immovable = true 
     plataform.frame = 3
 
-    // plataform 4
+    // plataform 4 (sand box)
 
-    plataform = footboard.create(670, 370, 'sand')
-    plataform.body.immovable = false 
-    plataform.frame = 3
+    sandBoxes = game.add.group() 
+    sandBoxes.enableBody = true
+
+    let sand  = sandBoxes.create(670, 370, 'sand')
+    sand.body.immovable = true 
+    sand.frame = 3
 
     // THE GOBLIN (PLAYER)
 
@@ -141,7 +152,12 @@ function create() {
     keyboardButton = game.input.keyboard.createCursorKeys()
 
     // SCORE 
-    scoreCounter  = game.add.text(10,18, 'Score: ', {fontSize: '43px', fill: '#ffff'})
+    scoreCounter  = game.add.text(10,18, 'Coins: 0', {fontSize: '43px', fill: '#ffff'})
+
+    // TIMER 
+
+    timer = game.time.create(false)
+    timer.start()
 
 }
 
@@ -178,22 +194,36 @@ function update() {
         goblin.body.velocity.y = -360
     }
 
-    game.physics.arcade.overlap(goblin, coin, getCoins, null, this)
-
     // Colecting coins 
 
     game.physics.arcade.overlap(goblin, coins, getCoins)
 
+    // Jumping over the sand boxes 
+
+    game.physics.arcade.collide(goblin, sandBoxes, makeTheSandFall)
 
 }
 
 // Functions Interaction
 
 function getCoins (goblin, coin) {
+
     coin.kill()
 
     score += 10
-    scoreCounter.text = 'Score: ' + score
+    scoreCounter.text = 'Coins: ' + score
 
     console.log(score)
+
 }
+
+function makeTheSandFall(goblin, sandBox) {
+
+    game.time.events.add(500, function () {
+        sandBox.body.velocity.y = 360
+    });
+
+}
+
+
+
