@@ -18,7 +18,7 @@ var score = 0
 var scoreCounter
 var keyboardButton 
 
-// Phaser Functions
+// Phaser Functions (preload, create and update)
 
 function preload() {
 
@@ -105,9 +105,15 @@ function create() {
     plataform.body.immovable = true 
     plataform.frame = 3
 
+    // plataform 3 
+
+    plataform = footboard.create(770, 350, 'rocks')
+    plataform.body.immovable = true 
+    plataform.frame = 3
+
     // plataform 4 (sand box)
 
-    let sand  = sandBoxes.create(670, 370, 'sand')
+    let sand  = sandBoxes.create(670, 390, 'sand')
     sand.body.immovable = true 
     sand.frame = 3
 
@@ -144,7 +150,7 @@ function create() {
     coin.body.gravity.y = 300
     coin.body.bounce.y = 0.7
 
-    coin = coins.create(700,400,'coin')
+    coin = coins.create(770, 315,'coin')
     coin.body.gravity.y = 300
     coin.body.bounce.y = 0.7
 
@@ -203,13 +209,13 @@ function update() {
 
 }
 
-// Functions Interaction
+// Interaction Functions (my functions)
 
 function getCoins (goblin, coin) {
 
     coin.kill()
 
-    score += 10
+    score += 1
     scoreCounter.text = 'Coins: ' + score
 
     console.log(score)
@@ -218,8 +224,12 @@ function getCoins (goblin, coin) {
 
 function makeTheSandFall(goblin, sandBox) {
 
-    game.time.events.add(500, function () {
+    game.time.events.add(400, function () {
         sandBox.body.velocity.y = 360
+    });
+
+    game.time.events.add(4000, function () {
+        sandBox.body.velocity.y = -360
     });
 
 }
