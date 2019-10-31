@@ -117,6 +117,8 @@ function create() {
     sand.body.immovable = true 
     sand.frame = 3
 
+    sand.animations.add('falling', [3, 4, 5, 6, 7], 10, false)
+
     // THE GOBLIN (PLAYER)
 
     goblin = game.add.sprite(12, game.world.height - 100, 'goblin')
@@ -224,12 +226,13 @@ function getCoins (goblin, coin) {
 
 function makeTheSandFall(goblin, sandBox) {
 
+    sandBox.animations.play('falling', true)
+
     game.time.events.add(400, function () {
         sandBox.body.velocity.y = 360
-    });
-
-    game.time.events.add(4000, function () {
-        sandBox.body.velocity.y = -360
+        game.time.events.add(400, function () {
+            sandBox.kill()
+        });
     });
 
 }
